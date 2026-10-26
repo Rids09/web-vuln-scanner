@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WAVS — Scan Results and Remediation Report">
+    <title>WAVS | Scan Results & Vulnerability Report</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">◈</div>
+                <div class="brand-text">
+                    <span class="brand-name">WAVS</span>
+                    <span class="brand-subtitle">SCAN RESULTS ENGINE</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <a href="/" class="secondary-button">← BACK TO DASHBOARD</a>
+            </div>
+        </header>
+
+        <!-- RESULTS WORKSPACE -->
+        <main class="workspace" style="max-width: 1200px; margin: 0 auto;">
+
+            <!-- PAGE HEADER -->
+            <div class="workspace-header">
+                <div>
+                    <span class="eyebrow">AUDIT REPORT</span>
+                    <h1>Vulnerability <span>Findings</span></h1>
+                    <p id="resultTargetDisplay">Target: {{ target_url if target_url else 'All Scan Sessions' }}</p>
+                </div>
+                <div class="workspace-actions">
+                    <button class="secondary-button" id="jsonReportButton" type="button">EXPORT JSON</button>
+                    <button class="secondary-button" id="pdfReportButton" type="button" style="border-color: var(--border-gold); color: var(--gold);">DOWNLOAD PDF REPORT</button>
+                </div>
+            </div>
+
+            <!-- FINDINGS TABLE CARD -->
+            <section class="dashboard-card findings-card">
+                <div class="card-header findings-header">
+                    <div>
+                        <span class="card-label">DETECTED VULNERABILITIES</span>
+                        <span class="card-description">Interactive findings log & remediation guides</span>
+                    </div>
+
+                    <div class="findings-actions">
+                        <select class="filter-select" id="severityFilter">
+                            <option value="all">ALL SEVERITIES</option>
+                            <option value="critical">CRITICAL ONLY</option>
+                            <option value="high">HIGH ONLY</option>
+                            <option value="medium">MEDIUM ONLY</option>
+                            <option value="low">LOW ONLY</option>
+                        </select>
+
+                        <select class="filter-select" id="moduleFilter">
+                            <option value="all">ALL MODULES</option>
+                            <option value="sqli">SQL INJECTION</option>
+                            <option value="xss">XSS</option>
+                            <option value="csrf">CSRF</option>
+                            <option value="ports">PORT SCAN</option>
+                            <option value="crawler">CRAWLER</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- FINDINGS TABLE -->
+                <div class="findings-table-wrapper">
+                    <table class="findings-table">
+                        <thead>
+                            <tr>
+                                <th>SEVERITY</th>
+                                <th>VULNERABILITY TYPE</th>
+                                <th>LOCATION / ENDPOINT</th>
+                                <th>PARAMETER</th>
+                            </tr>
+                        </thead>
+                        <tbody id="findingsTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                                    Loading scan findings...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- FINDING DETAIL PANEL MODAL -->
+            <div class="dashboard-card" id="findingDetails" style="display: none; margin-top: 20px; padding: 24px;">
+                <div class="card-header" style="border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">
+                    <div>
+                        <span class="severity-badge" id="detailSeverity">HIGH</span>
+                        <h2 id="detailTitle" style="color: var(--text); margin-top: 8px;">SQL Injection Detected</h2>
+                    </div>
+                    <button type="button" id="closeFindingDetails" class="secondary-button">✕ CLOSE</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 10px;">AFFECTED URL:</span>
+                        <p id="detailUrl" style="font-family: monospace; color: var(--gold); word-break: break-all;">--</p>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 10px;">PARAMETER:</span>
+                        <p id="detailParameter" style="font-family: monospace; color: var(--text-soft);">--</p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <span style="color: var(--text-muted); font-size: 10px;">DESCRIPTION:</span>
+                    <p id="detailDescription" style="color: var(--text-soft); font-size: 12px; margin-top: 4px;">--</p>
+                </div>
+
+                <div>
+                    <span style="color: var(--text-muted); font-size: 10px;">REMEDIATION RECOMMENDATION:</span>
+                    <p id="detailRemediation" style="color: var(--green); font-size: 12px; margin-top: 4px; background: rgba(2, 179, 67, 0.05); padding: 12px; border-radius: 6px; border: 1px solid var(--border-green);">--</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Main JavaScript script -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

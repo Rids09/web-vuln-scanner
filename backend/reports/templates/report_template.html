@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    body { font-family: Arial, sans-serif; color: #222; margin: 30px; }
+    h1 { color: #1a1a2e; border-bottom: 3px solid #e94560; padding-bottom: 8px; }
+    .meta { color: #555; margin-bottom: 20px; }
+    .summary { display: flex; gap: 12px; margin-bottom: 25px; }
+    .summary-box { padding: 10px 16px; border-radius: 6px; color: white; font-weight: bold; }
+    .Critical { background: #b91c1c; }
+    .High { background: #ea580c; }
+    .Medium { background: #ca8a04; }
+    .Low { background: #16a34a; }
+    .Informational { background: #64748b; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; vertical-align: top; }
+    th { background: #1a1a2e; color: white; }
+    .badge { padding: 3px 8px; border-radius: 4px; color: white; font-size: 11px; }
+</style>
+</head>
+<body>
+    <h1>Web Application Vulnerability Report</h1>
+    <div class="meta">
+        <strong>Target:</strong> {{ scan.target_url }}<br>
+        <strong>Scan started:</strong> {{ scan.started_at }}<br>
+        <strong>Scan finished:</strong> {{ scan.finished_at }}<br>
+        <strong>Report generated:</strong> {{ generated_at }}
+    </div>
+
+    <div class="summary">
+        {% for level, count in severity_counts.items() %}
+        <div class="summary-box {{ level }}">{{ level }}: {{ count }}</div>
+        {% endfor %}
+    </div>
+
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Severity</th>
+            <th>Location</th>
+            <th>Parameter</th>
+            <th>Evidence</th>
+            <th>Explanation</th>
+            <th>Remediation</th>
+        </tr>
+        {% for f in findings %}
+        <tr>
+            <td>{{ f.type }}</td>
+            <td><span class="badge {{ f.severity }}">{{ f.severity }}</span></td>
+            <td>{{ f.location }}</td>
+            <td>{{ f.parameter }}</td>
+            <td>{{ f.evidence }}</td>
+            <td>{{ f.explanation }}</td>
+            <td>{{ f.remediation }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if findings|length == 0 %}
+    <p>No vulnerabilities were detected during this scan.</p>
+    {% endif %}
+</body>
+</html>

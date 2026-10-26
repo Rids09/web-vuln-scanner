@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WAVS — Web Application Vulnerability Scanner Dashboard">
+    <title>WAVS | Security Operations Dashboard</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="app">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">◈</div>
+                <div class="brand-text">
+                    <span class="brand-name">WAVS</span>
+                    <span class="brand-subtitle">WEB APPLICATION VULNERABILITY SCANNER</span>
+                </div>
+            </div>
+
+            <div class="topbar-center">
+                <div class="system-status">
+                    <span class="status-dot online"></span>
+                    <span>SYSTEM ONLINE</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="scanner-version">SCANNER <span>v1.0</span></div>
+                <button class="icon-button" id="settingsButton" type="button" aria-label="Open settings">⚙</button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTAINER -->
+        <main class="dashboard">
+
+            <!-- SIDEBAR CONTROL PANEL -->
+            <aside class="scanner-sidebar">
+
+                <!-- TARGET INPUT -->
+                <section class="sidebar-section target-section">
+                    <div class="section-label">
+                        <span class="section-number">01</span> TARGET
+                    </div>
+                    <div class="input-group">
+                        <label for="targetUrl">TARGET URL</label>
+                        <div class="url-input-wrapper">
+                            <span class="input-prefix">//</span>
+                            <input type="url" id="targetUrl" name="targetUrl" placeholder="https://example.com" autocomplete="off">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SCAN PROFILE -->
+                <section class="sidebar-section">
+                    <div class="section-label">
+                        <span class="section-number">02</span> SCAN PROFILE
+                    </div>
+                    <div class="profile-selector">
+                        <button class="profile-option active" type="button" data-profile="full">
+                            <span>
+                                <strong>FULL SCAN</strong>
+                                <small>All available modules</small>
+                            </span>
+                            <span class="radio-indicator"></span>
+                        </button>
+
+                        <button class="profile-option" type="button" data-profile="quick">
+                            <span>
+                                <strong>QUICK SCAN</strong>
+                                <small>Fast vulnerability check</small>
+                            </span>
+                            <span class="radio-indicator"></span>
+                        </button>
+
+                        <button class="profile-option" type="button" data-profile="custom">
+                            <span>
+                                <strong>CUSTOM</strong>
+                                <small>Choose modules manually</small>
+                            </span>
+                            <span class="radio-indicator"></span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- SCANNER MODULES -->
+                <section class="sidebar-section">
+                    <div class="section-label">
+                        <span class="section-number">03</span> SCANNER MODULES
+                    </div>
+                    <div class="module-list">
+                        <label class="module-item">
+                            <input type="checkbox" name="module" value="crawler" checked>
+                            <span class="custom-checkbox"></span>
+                            <span class="module-info">
+                                <strong>CRAWLER</strong>
+                                <small>Endpoint discovery</small>
+                            </span>
+                            <span class="module-code">CRAWL</span>
+                        </label>
+
+                        <label class="module-item">
+                            <input type="checkbox" name="module" value="sqli" checked>
+                            <span class="custom-checkbox"></span>
+                            <span class="module-info">
+                                <strong>SQL INJECTION</strong>
+                                <small>Database injection</small>
+                            </span>
+                            <span class="module-code">SQLi</span>
+                        </label>
+
+                        <label class="module-item">
+                            <input type="checkbox" name="module" value="xss" checked>
+                            <span class="custom-checkbox"></span>
+                            <span class="module-info">
+                                <strong>XSS</strong>
+                                <small>Cross-site scripting</small>
+                            </span>
+                            <span class="module-code">XSS</span>
+                        </label>
+
+                        <label class="module-item">
+                            <input type="checkbox" name="module" value="csrf" checked>
+                            <span class="custom-checkbox"></span>
+                            <span class="module-info">
+                                <strong>CSRF</strong>
+                                <small>Request forgery</small>
+                            </span>
+                            <span class="module-code">CSRF</span>
+                        </label>
+
+                        <label class="module-item">
+                            <input type="checkbox" name="module" value="ports" checked>
+                            <span class="custom-checkbox"></span>
+                            <span class="module-info">
+                                <strong>PORT SCAN</strong>
+                                <small>Open port discovery</small>
+                            </span>
+                            <span class="module-code">PORT</span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- SCAN ACTIONS -->
+                <section class="scan-actions">
+                    <button class="start-scan-button" id="startScanButton" type="button">
+                        <span class="button-icon">▶</span>
+                        <span>START SCAN</span>
+                    </button>
+                    <button class="stop-scan-button" id="stopScanButton" type="button" disabled>
+                        STOP SCAN
+                    </button>
+                </section>
+
+                <!-- QUICK STATS -->
+                <section class="sidebar-section quick-stats-section">
+                    <div class="section-label">
+                        <span class="section-number">04</span> QUICK STATS
+                    </div>
+                    <div class="quick-stats">
+                        <div class="quick-stat">
+                            <span class="stat-label">ENDPOINTS</span>
+                            <strong id="endpointCount">00</strong>
+                        </div>
+                        <div class="quick-stat">
+                            <span class="stat-label">REQUESTS</span>
+                            <strong id="requestCount">000</strong>
+                        </div>
+                        <div class="quick-stat">
+                            <span class="stat-label">FINDINGS</span>
+                            <strong id="findingCount">00</strong>
+                        </div>
+                        <div class="quick-stat">
+                            <span class="stat-label">SCAN TIME</span>
+                            <strong id="scanTime">00:00</strong>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- MAIN WORKSPACE -->
+            <section class="workspace">
+
+                <!-- WORKSPACE HEADER -->
+                <div class="workspace-header">
+                    <div>
+                        <span class="eyebrow">SECURITY OPERATIONS</span>
+                        <h1>Vulnerability <span>Intelligence</span></h1>
+                        <p id="scanTargetDisplay">Awaiting target configuration...</p>
+                    </div>
+                    <div class="workspace-actions">
+                        <button class="secondary-button" id="refreshResultsButton" type="button">↻ REFRESH</button>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW GRID (SCORE & SEVERITY) -->
+                <section class="overview-grid">
+                    <article class="dashboard-card score-card">
+                        <div class="card-header">
+                            <div>
+                                <span class="card-label">SECURITY SCORE</span>
+                                <span class="card-description">Overall target assessment</span>
+                            </div>
+                            <span class="card-symbol">◉</span>
+                        </div>
+                        <div class="score-content">
+                            <div class="score-ring" id="securityScoreRing">
+                                <div class="score-value">
+                                    <strong id="security

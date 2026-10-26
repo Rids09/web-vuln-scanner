@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WAVS — Web Application Vulnerability Scanner">
+    <title>WAVS | Web Application Vulnerability Scanner</title>
+    
+    <!-- Main stylesheet using Flask static routing -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="app">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">◈</div>
+                <div class="brand-text">
+                    <span class="brand-name">WAVS</span>
+                    <span class="brand-subtitle">WEB APPLICATION VULNERABILITY SCANNER</span>
+                </div>
+            </div>
+
+            <div class="topbar-center">
+                <div class="system-status">
+                    <span class="status-dot online"></span>
+                    <span>SYSTEM ONLINE</span>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <div class="scanner-version">SCANNER <span>v1.0</span></div>
+                <button class="iconbutton" id="settingsButton" type="button" aria-label="Open settings">⚙</button>
+            </div>
+        </header>
+
+        <main class="dashboard">
+            <aside class="scanner-sidebar">
+                <!-- TARGET -->
+                <section class="sidebar-section target-section">
+                    <div class="section-label"><span class="section-number">01</span> TARGET</div>
+                    <div class="input-group">
+                        <label for="targetUrl">TARGET URL</label>
+                        <div class="url-input-wrapper">
+                            <span class="input-prefix">//</span>
+                            <input type="url" id="targetUrl" name="targetUrl" placeholder="https://example.com" autocomplete="off">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SCAN ACTIONS -->
+                <section class="scan-actions">
+                    <button class="start-scan-button" id="startScanButton" type="button">
+                        <span class="button-icon">▶</span>
+                        <span>START SCAN</span>
+                    </button>
+                    <button class="stop-scan-button" id="stopScanButton" type="button" disabled>STOP SCAN</button>
+                </section>
+            </aside>
+
+            <section class="workspace">
+                <div class="workspace-header">
+                    <div>
+                        <span class="eyebrow">SECURITY OPERATIONS</span>
+                        <h1>Vulnerability <span>Intelligence</span></h1>
+                        <p id="scanTargetDisplay">Awaiting target configuration...</p>
+                    </div>
+                </div>
+
+                <!-- FINDINGS SECTION -->
+                <section class="dashboard-card findings-card">
+                    <div class="card-header findings-header">
+                        <div>
+                            <span class="card-label">VULNERABILITY FINDINGS</span>
+                            <span class="card-description">Detected security vulnerabilities and flaws</span>
+                        </div>
+                    </div>
+                    <div class="findings-content" id="findingsContainer">
+                        <p style="padding: 20px; color: #888;">No findings reported yet. Start a scan to view results.</p>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <!-- JavaScript file link -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
